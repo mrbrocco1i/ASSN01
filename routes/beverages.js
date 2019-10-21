@@ -36,6 +36,23 @@ router.findOne = (req, res) => {
     });
 }
 
+router.findByCategory = (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    Beverage.find({"type": req.params.type}, function(err, beverage) {
+        if (err)
+            res.send(err);  //something is wrong here
+        else {
+            if (beverage === null)
+                res.send('No such type of beverage!');
+            else {
+                res.send(JSON.stringify(beverage,null,5));
+            }
+        }
+
+
+    });
+}
+
 router.addRecord = (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     var beverage = new Beverage();
@@ -84,9 +101,5 @@ router.deleteRecord = (req,res) => {
     });
 }
 
-function getByValue(array, id) {
-    var result  = array.filter(function(obj){return obj.id == id;} );
-    return result ? result[0] : null;
-}
 
 module.exports = router;

@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 const beverages = require('./routes/beverages');
+const administrators = require('./routes/administrators');
 
 var app = express();
 
@@ -25,10 +26,19 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 app.get('/beverages', beverages.findAll);
-app.get('/beverages/:id', beverages.findOne);
-app.post('/beverages', beverages.addRecord);
-app.put('/beverages/:id/addAmount', beverages.incrementAmount);
-app.delete('/beverages/:id', beverages.deleteRecord);
+app.get('/beverages/findById/:id', beverages.findOne);
+app.get('/beverages/findByType/:type', beverages.findByCategory);
+app.post('/beverages/addRecord', beverages.addRecord);
+app.put('/beverages/addAmount/:id', beverages.incrementAmount);
+app.delete('/beverages/deleteById/:id', beverages.deleteRecord);
+
+
+app.get('/administrators', administrators.findAll);
+app.get('/administrators/findById/:id', administrators.findOne);
+app.post('/administrators/login',administrators.login);
+app.post('/administrators/addRecord', administrators.addRecord);
+app.delete('/administrators/deleteById/:id', administrators.deleteRecord);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
