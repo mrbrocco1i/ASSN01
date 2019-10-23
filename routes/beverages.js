@@ -20,8 +20,10 @@ router.findAll = (req, res) => {
     Beverage.find(function (err, beverage) {
         if (err)
             res.send({message: 'SOMETHING IS WRONG!', err});
+        else if (beverage.length === 0)
+            res.send('No Record Found!');
         else
-            res.send(JSON.stringify(beverage, null, 5))
+            res.send(JSON.stringify(beverage, null, 5));
     });
 }
 
@@ -29,7 +31,9 @@ router.findOne = (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     Beverage.find({ "_id" : req.params.id },function(err, beverage) {
         if (err)
-            res.send({message: 'Beverage NOT Found!', err});
+            res.send(err);
+        else if (beverage.length === 0)
+            res.send('No Such Beverage!');
         else
             res.send(JSON.stringify(beverage,null,5));
 
@@ -40,9 +44,9 @@ router.findByCategory = (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     Beverage.find({"type": req.params.type}, function(err, beverage) {
         if (err)
-            res.send(err);  //something is wrong here
+            res.send(err);
         else {
-            if (beverage === [])
+            if (beverage.length === 0)
                 res.send('No such type of beverage!');
             else {
                 res.send(JSON.stringify(beverage,null,5));
@@ -75,7 +79,7 @@ router.incrementAmount = (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     Beverage.findById(req.params.id, function(err,beverage) {
         if (err)
-            res.send({message: 'Beverage NOT Found!', err});
+            res.send(err);
         else {
             beverage.amount += 1;
             beverage.save(function (err) {
@@ -138,8 +142,26 @@ router.deleteByName = (req,res) => {
 
     })
 
+}
+
+router.findByNameFuzzy = (req,res) => {
+    res.setHeader('Content-Type', 'application/json');
+    var regex = new RegExp(req.params.fname,'i');
+    console.log(regex);
+    Beverage.find({"name":regex}, function(err,beverage) {
+        if (err)
+            res.send(err);
+        else {
+            if (beverage.length === 0)
+                res.send('No Such Beverage!');
+            else
+                res.send(JSON.stringify(beverage,null,5));
+        }
 
 
+
+
+    })
 
 }
 
