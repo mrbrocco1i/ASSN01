@@ -20,6 +20,8 @@ router.findAll = (req, res) => {
     Administrator.find(function (err, administrator) {
         if (err)
             res.send({message: 'SOMETHING IS WRONG!', err});
+        else if (administrator.length === 0)
+            res.send('No Record!');
         else
             res.send(JSON.stringify(administrator, null, 5))
     });
@@ -30,6 +32,8 @@ router.findOne = (req, res) => {
     Administrator.find({ "_id" : req.params.id },function(err, administrator) {
         if (err)
             res.send({message: 'Administrator NOT Found!', err});
+        else if (administrator.length === 0)
+            res.send('No Such Administrator!');
         else
             res.send(JSON.stringify(administrator,null,5));
 
@@ -67,17 +71,13 @@ router.login = (req,res) => {
 
     Administrator.find({"username": req.body.username}, function(err, administrator) {
         if (err)
-            res.send({message: 'Username does not exist!', err}); //something is wrong here
-        else {
-            if (administrator[0].password === req.body.password){
-                res.send('Welcome');
-            }
-
-            else {
-                res.send('Password is not correct!');
-            }
-
-        }
+            res.send(err);
+        else if (administrator.length === 0)
+            res.send('No Such Username!');
+        else if (administrator[0].password === req.body.password)
+            res.send('Welcome');
+        else
+            res.send('Password is not correct!');
     })
 
 }

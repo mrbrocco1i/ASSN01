@@ -28,6 +28,7 @@ app.use('/users', usersRouter);
 app.get('/beverages', beverages.findAll);
 app.get('/beverages/findById/:id', beverages.findOne);
 app.get('/beverages/findByType/:type', beverages.findByCategory);
+app.get('/beverages/findByName_fuzzy/:fname',beverages.findByNameFuzzy);
 app.post('/beverages/addRecord', beverages.addRecord);
 app.put('/beverages/addAmount/:id', beverages.incrementAmount);
 app.put('/beverages/changePrice/:id',beverages.changePrice);
