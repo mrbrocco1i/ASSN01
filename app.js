@@ -30,7 +30,9 @@ app.get('/beverages/findById/:id', beverages.findOne);
 app.get('/beverages/findByType/:type', beverages.findByCategory);
 app.post('/beverages/addRecord', beverages.addRecord);
 app.put('/beverages/addAmount/:id', beverages.incrementAmount);
+app.put('/beverages/changePrice/:id',beverages.changePrice);
 app.delete('/beverages/deleteById/:id', beverages.deleteRecord);
+app.delete('/beverages/deleteByName/:name',beverages.deleteByName);
 
 
 app.get('/administrators', administrators.findAll);

@@ -42,7 +42,7 @@ router.findByCategory = (req, res) => {
         if (err)
             res.send(err);  //something is wrong here
         else {
-            if (beverage === null)
+            if (beverage === [])
                 res.send('No such type of beverage!');
             else {
                 res.send(JSON.stringify(beverage,null,5));
@@ -93,6 +93,7 @@ router.incrementAmount = (req, res) => {
 }
 
 router.deleteRecord = (req,res) => {
+    res.setHeader('Content-Type', 'application/json');
     Beverage.findByIdAndRemove(req.params.id, function(err) {
         if (err)
             res.send(err);
@@ -101,5 +102,45 @@ router.deleteRecord = (req,res) => {
     });
 }
 
+router.changePrice = (req,res) => {
+    res.setHeader('Content-Type', 'application/json');
+    Beverage.findById(req.params.id, function(err,beverage){
+        if (err)
+            res.send(err);
+        else {
+            beverage.price = req.body.price;
+            beverage.save(function (err) {
+                if (err)
+                    res.send(err);
+                else
+                    mes = {
+                        message: 'Price Changed Successfully!',
+                        beverage: beverage
+                    }
+                res.send(JSON.stringify(mes,null,5));
+            })
+        }
+
+    })
+
+
+
+}
+
+router.deleteByName = (req,res) => {
+    res.setHeader('Content-Type', 'application/json');
+    Beverage.findOneAndDelete({"name": req.params.name}, function(err, beverage){
+        if (err)
+            res.send(err);
+        else
+            res.send('Beverage Deleted!');
+
+
+    })
+
+
+
+
+}
 
 module.exports = router;
