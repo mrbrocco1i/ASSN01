@@ -1,8 +1,0 @@
-GET http://localhost:3000/beverages
-Accept: */*
-Cache-Control: no-cache
-
-<> 2019-10-23T040022.200.json
-
-###
-
