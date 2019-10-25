@@ -2,9 +2,12 @@ let Administrator = require('../models/administrators');
 let express = require('express');
 let router = express.Router();
 let mongoose = require('mongoose');
+let jwt = require('jsonwebtoken');
 var mongodbUri = 'mongodb://localhost:27017/vendingMdb';
 
-mongoose.connect(mongodbUri);
+mongoose.connect(mongodbUri, {
+    useNewUrlParser: true, useUnifiedTopology: true
+});
 let db = mongoose.connection;
 
 db.on('error', function (err) {
@@ -46,7 +49,7 @@ router.addRecord = (req, res) => {
     administrator.username = req.body.username;
     administrator.password = req.body.password;
     administrator.authorised = true;
-    administrator.jurisdiction = 'read-only';
+    administrator.privilege = 'read-only';
 
     administrator.save(function(err) {
         if (err)
@@ -74,12 +77,28 @@ router.login = (req,res) => {
             res.send(err);
         else if (administrator.length === 0)
             res.send('No Such Username!');
-        else if (administrator[0].password === req.body.password)
-            res.send('Welcome');
+        else if (administrator[0].password === req.body.password) {
+            let token = administrator[0].generatetoken();
+            res.json({message: `welcome, ${administrator[0].username}!`, token: token});
+        }
         else
             res.send('Password is not correct!');
+
     })
 
+}
+
+router.loginByToken = (req,res) => {
+    console.log(req.token);
+    jwt.verify(req.token, 'secretkey',(err,authData) => {
+        if (err)
+            res.sendStatus(403);
+        else {
+            res.json({
+                message: `Welcome Back, ${authData.username}!`
+            })
+        }
+    })
 }
 
 
