@@ -22,6 +22,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+/*
+app.use("*", function (req,res,next) {
+  res.header('Access-Control-Allow-Origin','*');
+  res.header('Access-Control-Allow-Headers','Content-Type,Content-Length,Authorization,Accept,X-Requested-With,token');
+  res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers','token');
+
+  if (req.method === 'OPTIONS')
+    res.send(200);
+  else
+    next()
+})
+*/
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
@@ -40,6 +53,7 @@ app.get('/administrators', administrators.findAll);
 app.get('/administrators/findById/:id', administrators.findOne);
 app.post('/administrators/login',administrators.login);
 app.post('/administrators/addRecord', administrators.addRecord);
+app.post('/administrators/loginByToken',verifyToken,administrators.loginByToken);
 app.delete('/administrators/deleteById/:id', administrators.deleteRecord);
 
 
@@ -58,5 +72,19 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+function verifyToken(req,res,next) {
+    const bearerHeader = req.headers['authorization'];
+    if(typeof bearerHeader !== 'undefined'){
+        const bearer = bearerHeader.split(' ');
+        const bearerToken =bearer[1];
+        req.token = bearerToken;
+        next();
+    }
+    else {
+        res.sendStatus(403);
+    }
+
+}
 
 module.exports = app;
