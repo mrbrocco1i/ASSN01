@@ -27,7 +27,7 @@ In router.login, router.loginByToken in ./routes/beverages.js
 
 Git:
 
-Using GitHub (link:)
+Using GitHub (link: https://github.com/mrbrocco1i/ASSN01.git)
 
 
 DX:
