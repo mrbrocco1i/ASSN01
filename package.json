@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "NODE_ENV=test mocha test/functional/api/beveragesTest.js --exit "
+    "atest": "NODE_ENV=test mocha test/functional/api/administratorsTest.js --exit ",
+    "btest": "NODE_ENV=test mocha test/functional/api/beveragesTest.js --exit "
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
