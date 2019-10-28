@@ -324,12 +324,12 @@ describe("Beverages", () => {
 
     });
 
-    /*
+
     describe("Delete /beverages/deleteByName/:name", () => {
         describe("when the name exists", () => {
             it("should return a message and the record with this name will be discarded", () => {
                     return request(server)
-                        .delete(`/beverages/deleteByName/${validName}}`)
+                        .delete(`/beverages/deleteByName/${validName}`)
                         .expect(200)
                         .then(res => {
                             expect(res.body).to.include({
@@ -345,7 +345,7 @@ describe("Beverages", () => {
                     .expect("Content-Type", /json/)
                     .expect(200)
                     .then(res => {
-                        expect(res.body).equals('No Such Beverage!'); //something is wrong here
+                        expect(res.body.message).equals('No Such Beverage!'); //something is wrong here
                     });
             });
 
@@ -363,7 +363,7 @@ describe("Beverages", () => {
         })
 
     });
-*/
+
 
 })
 
