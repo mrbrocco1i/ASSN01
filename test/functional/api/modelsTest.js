@@ -73,34 +73,50 @@ describe("Beverages", () => {
     });
 
     describe("GET /beverages", () => {
-        it("should GET all the beverages", done => {
-            request(server)
-                .get("/beverages")
-                .set("Accept", "application/json")
-                .expect("Content-Type", /json/) // regular expression
-                .expect(200)
-                .end((err, res) => {
-                    try {
-                        expect(res.body).to.be.a("array");
-                        expect(res.body.length).to.equal(2);
-                        let result = _.map(res.body, beverage => {
-                            return {
-                                name: beverage.name
-                            };
-                        });
-                        expect(result).to.deep.include({
-                            name: "FIJI Natural Artesian Water Bottles"
-                        });
-                        expect(result).to.deep.include({
-                            name: "Coca-Cola Original Taste Cans"
-                        });
+        describe('when the collection is not empty', () => {
+            it("should GET all the beverages", done => {
+                request(server)
+                    .get("/beverages")
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/) // regular expression
+                    .expect(200)
+                    .end((err, res) => {
+                        try {
+                            expect(res.body).to.be.a("array");
+                            expect(res.body.length).to.equal(2);
+                            let result = _.map(res.body, beverage => {
+                                return {
+                                    name: beverage.name
+                                };
+                            });
+                            expect(result).to.deep.include({
+                                name: "FIJI Natural Artesian Water Bottles"
+                            });
+                            expect(result).to.deep.include({
+                                name: "Coca-Cola Original Taste Cans"
+                            });
 
-                        done();
-                    } catch (e) {
-                        done(e);
-                    }
-                });
-        });
+                            done();
+                        } catch (e) {
+                            done(e);
+                        }
+                    });
+            });
+        })
+        describe('when the collection is empty', () => {
+            it('should return a error message', () => {
+                db.dropDatabase();
+                return request(server)
+                    .get('/beverages')
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .then(res => {
+                        expect(res.body.message).equals('No Record Found!');
+                    });
+            })
+        })
+
     });
 
     describe("GET /beverages/findById/:id", () => {
@@ -123,6 +139,16 @@ describe("Beverages", () => {
                 return request(server)
                     .get("/beverages/findById/9999")
                     .expect(404)
+            });
+        });
+        describe("when the id is valid but not right", () => {
+            it("should return an error message", () => {
+                return request(server)
+                    .get("/beverages/findById/5da70ae77ae718085631ed02")
+                    .expect(200)
+                    .then(res => {
+                        expect(res.body.message).equals('No Such Beverage!');
+                    })
             });
         });
     });
@@ -279,7 +305,7 @@ describe("Beverages", () => {
         describe("when the id is invalid", () => {
             it("should return a 404 for invalid message", () => {
                 return request(server)
-                    .put("/beverages/addAmount/9999")
+                    .put("/beverages/changePrice/9999")
                     .expect(404)
 
             });
@@ -316,9 +342,8 @@ describe("Beverages", () => {
         describe("when the id is invalid", () => {
             it("should return a message for deleting failure", () => {
                 return request(server)
-                    .delete("/beverages/findById/9999")
+                    .delete("/beverages/deleteById/9999")
                     .expect(404)
-
             })
 
         })
@@ -327,41 +352,27 @@ describe("Beverages", () => {
 
 
     describe("Delete /beverages/deleteByName/:name", () => {
-        describe("when the name exists", () => {
-            it("should return a message and the record with this name will be discarded", () => {
-                    return request(server)
-                        .delete(`/beverages/deleteByName/${validName}`)
-                        .expect(200)
-                        .then(res => {
-                            expect(res.body).to.include({
-                                message: 'Record Successfully Deleted!'
-                            });
-                        });
-                }
-            );
-            after(() => {
+        it("should return a message and the record with this name will be discarded", () => {
                 return request(server)
-                    .get(`/beverages/findById/${validID}`)
-                    .set("Accept", "application/json")
-                    .expect("Content-Type", /json/)
+                    .delete(`/beverages/deleteByName/${validName}`)
                     .expect(200)
                     .then(res => {
-                        expect(res.body.message).equals('No Such Beverage!'); //something is wrong here
+                        expect(res.body).to.include({
+                            message: 'Record Successfully Deleted!'
+                        });
                     });
-            });
-
-
-
+            }
+        );
+        after(() => {
+            return request(server)
+                .get(`/beverages/findById/${validID}`)
+                .set("Accept", "application/json")
+                .expect("Content-Type", /json/)
+                .expect(200)
+                .then(res => {
+                    expect(res.body.message).equals('No Such Beverage!'); //something is wrong here
+                });
         });
-        describe("when the name does not exist", () => {
-            it("should return a message for deleting failure", () => {
-                return request(server)
-                    .delete("/beverages/findById/9999")
-                    .expect(404)
-
-            })
-
-        })
 
     });
 
@@ -425,34 +436,50 @@ describe("Administrators", () => {
     });
 
     describe("GET /administrators", () => {
-        it("should GET all the admins", done => {
-            request(server)
-                .get("/administrators")
-                .set("Accept", "application/json")
-                .expect("Content-Type", /json/) // regular expression
-                .expect(200)
-                .end((err, res) => {
-                    try {
-                        expect(res.body).to.be.a("array");
-                        expect(res.body.length).to.equal(2);
-                        let result = _.map(res.body, admin => {
-                            return {
-                                username: admin.username
-                            };
-                        });
-                        expect(result).to.deep.include({
-                            username: "Myron"
-                        });
-                        expect(result).to.deep.include({
-                            username: "Mike"
-                        });
+        describe('when the collection is not empty', () => {
+            it("should GET all the admins", done => {
+                request(server)
+                    .get("/administrators")
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/) // regular expression
+                    .expect(200)
+                    .end((err, res) => {
+                        try {
+                            expect(res.body).to.be.a("array");
+                            expect(res.body.length).to.equal(2);
+                            let result = _.map(res.body, admin => {
+                                return {
+                                    username: admin.username
+                                };
+                            });
+                            expect(result).to.deep.include({
+                                username: "Myron"
+                            });
+                            expect(result).to.deep.include({
+                                username: "Mike"
+                            });
 
-                        done();
-                    } catch (e) {
-                        done(e);
-                    }
-                });
-        });
+                            done();
+                        } catch (e) {
+                            done(e);
+                        }
+                    });
+            });
+        })
+        describe('when the collection is empty', () => {
+            it('should return a error message', () => {
+                db.dropDatabase();
+                return request(server)
+                    .get('/administrators')
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .then(res => {
+                        expect(res.body.message).equals('No Record!')
+                    });
+            })
+        })
+
     });
 
     describe("GET /administrators/findById/:id", () => {
@@ -480,31 +507,64 @@ describe("Administrators", () => {
     })
 
     describe("Post /administrators/login", () => {
-        it("should return a \'welcome\' message", done => {
-            const admin = {
-                username: 'Myron',
-                password: '123456'
-            }
-            request(server)
-                .post('/administrators/login')
-                .send(admin)
-                .expect(200)
-                .end((err,res) => {
-                    expect(res.body.message).equals('Welcome, Myron!');
-                    expect(res.body).to.have.property('token');
-                    validToken = res.body.token;
-                    done(err);
-                })
+        describe("when the username and password are right", () => {
+            it("should return a \'welcome\' message", done => {
+                const admin = {
+                    username: 'Myron',
+                    password: '123456'
+                }
+                request(server)
+                    .post('/administrators/login')
+                    .send(admin)
+                    .expect(200)
+                    .end((err,res) => {
+                        expect(res.body.message).equals('Welcome, Myron!');
+                        expect(res.body).to.have.property('token');
+                        validToken = res.body.token;
+                        done(err);
+                    })
+            })
+            after(() => {
+                return request(server)
+                    .post('/administrators/loginByToken')
+                    .set('Authorization', 'Bearer '+validToken)
+                    .expect(200)
+                    .then(res => {
+                        expect(res.body.message).equals('Welcome Back, Myron!');
+                    } )
+            })
         })
-        after(() => {
-            return request(server)
-                .post('/administrators/loginByToken')
-                .set('Authorization', 'Bearer '+validToken)
-                .expect(200)
-                .then(res => {
-                    expect(res.body.message).equals('Welcome Back, Myron!');
-                } )
+        describe("when the username is not right,", () => {
+            it('should return a error message', () => {
+                const admin = {
+                    username: 'Corey',
+                    password: '123456'
+                }
+                return request(server)
+                    .post('/administrators/login')
+                    .send(admin)
+                    .expect(200)
+                    .then(res => {
+                        expect(res.body.message).equals('No Such Username!');
+                    })
+            })
         })
+        describe("when the password is not right,", () => {
+            it('should return a error message', () => {
+                const admin = {
+                    username: 'Myron',
+                    password: '123'
+                }
+                return request(server)
+                    .post('/administrators/login')
+                    .send(admin)
+                    .expect(200)
+                    .then(res => {
+                        expect(res.body.message).equals('Password is not correct!');
+                    })
+            })
+        })
+
     })
 
     describe("POST /administrators/addRecord", () => {
@@ -539,15 +599,27 @@ describe("Administrators", () => {
     });
 
     describe("POST /administrators/loginByToken", () => {
-        it('should return a \'welcome\' message', () => {
-            return request(server)
-                .post('/administrators/loginByToken')
-                .set('Authorization', 'Bearer '+validToken)
-                .expect(200)
-                .then(res => {
-                    expect(res.body.message).equals('Welcome Back, Myron!');
-                } );
+        describe('when the token is valid', () => {
+            it('should return a \'welcome\' message', () => {
+                return request(server)
+                    .post('/administrators/loginByToken')
+                    .set('Authorization', 'Bearer '+validToken)
+                    .expect(200)
+                    .then(res => {
+                        expect(res.body.message).equals('Welcome Back, Myron!');
+                    } );
+            })
         })
+        describe('when the token is invalid', () => {
+            it('should return an \'forbidden\' message', () => {
+                return request(server)
+                    .post('/administrators/loginByToken')
+                    .set('Authorization', 'Bearer '+ 'abc')
+                    .expect(403)
+            })
+
+        })
+
     })
 
     describe("Delete /administrators/deleteById/:id", () => {
@@ -580,7 +652,7 @@ describe("Administrators", () => {
         describe("when the id is invalid", () => {
             it("should return a message for deleting failure", () => {
                 return request(server)
-                    .delete("/administrators/findById/9999")
+                    .delete("/administrators/deleteById/9999")
                     .expect(404)
 
             })

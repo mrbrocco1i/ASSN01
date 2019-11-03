@@ -19,10 +19,8 @@ db.once('open', function () {
 router.findAll = (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     Beverage.find(function (err, beverage) {
-        if (err)
-            res.send(err);
-        else if (beverage.length === 0)
-            res.send('No Record Found!');
+        if (beverage.length === 0)
+            res.json({message: 'No Record Found!'});
         else
             res.json(beverage);
     });
@@ -46,17 +44,11 @@ router.findOne = (req, res) => {
 router.findByCategory = (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     Beverage.find({"type": req.params.type}, function(err, beverage) {
-        if (err)
-            res.send(err);
+        if (beverage.length === 0)
+            res.send({message:'No such type of beverage!'});
         else {
-            if (beverage.length === 0)
-                res.send({message:'No such type of beverage!'});
-            else {
-                res.json(beverage);
-            }
+            res.json(beverage);
         }
-
-
     });
 }
 
@@ -71,10 +63,7 @@ router.addRecord = (req, res) => {
     beverage.price = req.body.price;
 
     beverage.save(function(err) {
-        if (err)
-            res.send({message: 'Fail To Add Record!', err});
-        else
-            res.json({message:'Record Added!', data:beverage});
+        res.json({message:'Record Added!', data:beverage});
     });
 }
 
@@ -88,14 +77,11 @@ router.incrementAmount = (req, res) => {
         else {
             beverage.amount += 1;
             beverage.save(function (err) {
-                if (err)
-                    res.send(err);
-                else
-                    mes = {
-                        message: 'Amount Increased!',
-                        beverage: beverage
-                    }
-                    res.send(JSON.stringify(mes,null,5));
+                mes = {
+                    message: 'Amount Increased!',
+                    beverage: beverage
+                    };
+                res.send(JSON.stringify(mes,null,5));
             });
         }
     });
@@ -123,12 +109,9 @@ router.changePrice = (req,res) => {
         else {
             beverage.price = req.body.price;
             beverage.save(function (err) {
-                if (err)
-                    res.send(err);
-                else
-                    mes = {
-                        message: 'Price Changed Successfully!',
-                        beverage: beverage
+                mes = {
+                    message: 'Price Changed Successfully!',
+                    beverage: beverage
                     }
                 res.send(JSON.stringify(mes,null,5));
             })

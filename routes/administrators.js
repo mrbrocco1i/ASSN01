@@ -21,10 +21,8 @@ db.once('open', function () {
 router.findAll = (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     Administrator.find(function (err, administrator) {
-        if (err)
-            res.send({message: 'SOMETHING IS WRONG!', err});
-        else if (administrator.length === 0)
-            res.send('No Record!');
+        if (administrator.length === 0)
+            res.json({message: 'No Record!'});
         else
             res.send(JSON.stringify(administrator, null, 5))
     });
@@ -54,10 +52,7 @@ router.addRecord = (req, res) => {
     administrator.privilege = 'read-only';
 
     administrator.save(function(err) {
-        if (err)
-            res.send({message: 'Fail To Add Record!', err});
-        else
-            res.json({message:'Record Added!',data:administrator});
+        res.json({message:'Record Added!',data:administrator});
     });
 }
 
@@ -80,13 +75,13 @@ router.login = (req,res) => {
         if (err)
             res.send(err);
         else if (administrator.length === 0)
-            res.send('No Such Username!');
+            res.json({message: 'No Such Username!'});
         else if (administrator[0].password === req.body.password) {
             let token = administrator[0].generatetoken();
             res.json({message: `Welcome, ${administrator[0].username}!`, token: token});
         }
         else
-            res.send('Password is not correct!');
+            res.json({message: 'Password is not correct!'});
 
     })
 
