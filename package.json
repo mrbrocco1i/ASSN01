@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "NODE_ENV=test mocha test/functional/api/beveragesTest.js --exit "
+    "test": "NODE_ENV=test mocha test/functional/api/modelsTest.js --exit "
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
@@ -22,7 +22,9 @@
   },
   "devDependencies": {
     "chai": "^4.0.2",
+    "eslint": "^6.5.1",
     "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
     "supertest": "^4.0.2"
   }
 }

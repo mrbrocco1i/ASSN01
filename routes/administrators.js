@@ -21,10 +21,8 @@ db.once('open', function () {
 router.findAll = (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     Administrator.find(function (err, administrator) {
-        if (err)
-            res.send({message: 'SOMETHING IS WRONG!', err});
-        else if (administrator.length === 0)
-            res.send('No Record!');
+        if (administrator.length === 0)
+            res.json({message: 'No Record!'});
         else
             res.send(JSON.stringify(administrator, null, 5))
     });
@@ -33,12 +31,14 @@ router.findAll = (req, res) => {
 router.findOne = (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     Administrator.find({ "_id" : req.params.id },function(err, administrator) {
-        if (err)
-            res.send({message: 'Administrator NOT Found!', err});
+        if (err){
+            res.status(404);
+            res.send(err);
+        }
         else if (administrator.length === 0)
-            res.send('No Such Administrator!');
+            res.json({message: 'No Such Admin!'});
         else
-            res.send(JSON.stringify(administrator,null,5));
+            res.json(administrator);
 
     });
 }
@@ -52,20 +52,19 @@ router.addRecord = (req, res) => {
     administrator.privilege = 'read-only';
 
     administrator.save(function(err) {
-        if (err)
-            res.send({message: 'Fail To Add Record!', err});
-        else
-            res.send('Record Added!');
+        res.json({message:'Record Added!',data:administrator});
     });
 }
 
 
 router.deleteRecord = (req,res) => {
     Administrator.findByIdAndRemove(req.params.id, function(err) {
-        if (err)
+        if (err) {
+            res.status(404);
             res.send(err);
+        }
         else
-            res.send('Record Successfully Deleted!');
+            res.json({message:'Record Successfully Deleted!'});
     });
 }
 
@@ -76,13 +75,13 @@ router.login = (req,res) => {
         if (err)
             res.send(err);
         else if (administrator.length === 0)
-            res.send('No Such Username!');
+            res.json({message: 'No Such Username!'});
         else if (administrator[0].password === req.body.password) {
             let token = administrator[0].generatetoken();
-            res.json({message: `welcome, ${administrator[0].username}!`, token: token});
+            res.json({message: `Welcome, ${administrator[0].username}!`, token: token});
         }
         else
-            res.send('Password is not correct!');
+            res.json({message: 'Password is not correct!'});
 
     })
 
