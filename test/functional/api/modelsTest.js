@@ -380,7 +380,7 @@ describe("Beverages", () => {
 })
 
 describe("Administrators", () => {
-    before(async () => {
+    /*before(async () => {
         try {
             mongod = new MongoMemoryServer({
                 instance: {
@@ -403,7 +403,7 @@ describe("Administrators", () => {
             console.log(error);
         }
     });
-
+*/
     after(async () => {
         try {
             await db.dropDatabase();
@@ -582,7 +582,6 @@ describe("Administrators", () => {
                 .then(res => {
                     expect(res.body.message).equals("Record Added!");
                     validID = res.body.data._id;
-                    console.log(validID)
                 });
         });
         after(() => {

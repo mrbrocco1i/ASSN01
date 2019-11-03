@@ -1,51 +1,126 @@
-# ASSN01
-Vending Machine Stock Management System
-Name: Wuzhen Ye
-Student ID: 20086431
+# Assignment 1 - Agile Software Practice.
+
+Name: ... Wuzhen Ye ...
+
+## Overview.
+
+...... I'm developing a vending machine stock management system. Many beverages can be set up in the machine, and their information will be recorded in the database. Administrators can manage the information, such as price, amount, name, and if neccessary they can change what's being sold in the machine. Administrators have different privileges, some of whom can only search the information, but some can change the data. ........
+
+## API endpoints.
+
+    Beverages
+ + GET /beverages - Get all beverages.
+ + GET /beverages/findById/:id- Get beverages by their IDs.
+ + GET /beverages/findByType/:type - Get beverages by their categories.
+ + GET /beverages/findByName_fuzzy/:fname - Get beverages by some key words in their name.
+ + POST /beverages/addRecord - Add beverages records.
+ + PUT /beverages/addAmount/:id - Add the amount of a certain beverage by 1
+ + PUT /beverages/changePrice/:id
+ + Delete /beverages/deleteById/:id
+ + Delete /beverages/deleteByName/:name
+ 
+    Administrators
+ + GET /administrators
+ + GET /administrators/findById/:id
+ + Post /administrators/login
+ + POST /administrators/addRecord
+ + POST /administrators/loginByToken
+ + Delete /administrators/deleteById/:id
+
+## Data model.
+
+. . . . Describe the structure of the database being used by your API. An image (see example below) or JSON represerntation is acceptable . . . . 
+
+![][datamodel]
 
 
-Functionality:
+## Sample Test execution.
 
-2 models: beverages and administrators
+~~~
+    Beverages
+      GET /beverages
+        when the collection is not empty
+  Successfully Connected to [ vendingMdb ]
+  Successfully Connected to [ vendingMdb ]
+          ✓ should GET all the beverages
+        when the collection is empty
+          ✓ should return a error message
+      GET /beverages/findById/:id
+        when the id is valid
+          ✓ should return the matching beverage
+        when the id is invalid
+          ✓ should return a 404 for invalid message
+        when the id is valid but not right
+          ✓ should return an error message
+      GET /beverages/findByType/:type
+        when the id is valid
+          ✓ should return the matching beverage
+        when the id is invalid
+          ✓ should return the NOT found message
+      GET /beverages/findByName_fuzzy/:fname
+        when the id is valid
+          ✓ should return the matching beverage
+        when the id is invalid
+          ✓ should return the NOT found message
+      POST /beverages/addRecord
+        ✓ should return confirmation message and update database
+      PUT /beverages/addAmount/:id
+        when the id is valid
+          ✓ should return a message and the beverage amount increased by 1
+        when the id is invalid
+          ✓ should return a 404 for invalid message
+      PUT /beverages/changePrice/:id
+        when the id is valid
+          ✓ should return a message and the price is changed
+        when the id is invalid
+          ✓ should return a 404 for invalid message
+      Delete /beverages/deleteById/:id
+        when the id is valid
+          ✓ should return a message and the record with this id will be discarded
+        when the id is invalid
+          ✓ should return a message for deleting failure
+      Delete /beverages/deleteByName/:name
+        ✓ should return a message and the record with this name will be discarded
 
-9 routes are included in beverages.js:
-4 GET (Users can find all records, find records by ID, type; They can also get records using fizzy searches by entering key words in the beverage name),
-1 POST (Add record to database),
-2 PUT (Add the amount of certain beverage; Update the price of certain beverage),
-2 DEL (Delete record by ID, name)
-
-6 routes in administrators.js
-2 GET (find all records, find By username),
-3 POST (Users can log in by entering their username and password. If their entry is correct, a token will be generated, by which they can reenter the system again in 30s because the token will expire 30 seconds after they first enter their account information; add administrator record),
-1 DEL (Delete administrator by ID)
-
-
-Persistence:
-
-Authentication (When user visits the website again, the login information can be kept without reentering username and password a second time)
-In router.login, router.loginByToken in ./routes/beverages.js
-
-Git:
-
-Using GitHub (link: https://github.com/mrbrocco1i/ASSN01.git)
-
-
-DX:
-
-Automated Testing
-One model is tested.
-file path: ./test/functional/api/beveragesTest
-
-
-References:
-
-1. Node.js API Authentication With JWT
-link:
-https://www.npmjs.com/package/jsonwebtoken
-https://youtu.be/7nafaH9SddU
-
-2. Fizzy Searches
-https://mongoosejs.com/docs/api.html#model_Model.find
-https://stackoverflow.com/questions/494035/how-do-you-use-a-variable-in-a-regular-expression
+    Administrators
+      GET /administrators
+        when the collection is not empty
+          ✓ should GET all the admins
+        when the collection is empty
+          ✓ should return a error message
+      GET /administrators/findById/:id
+        when the id is valid
+          ✓ should return the matching admin
+        when the id is invalid
+          ✓ should return a 404 for invalid message
+      Post /administrators/login
+        when the username and password are right
+          ✓ should return a 'welcome' message
+        when the username is not right,
+          ✓ should return a error message
+        when the password is not right,
+          ✓ should return a error message
+      POST /administrators/addRecord
+        ✓ should return confirmation message and update database
+      POST /administrators/loginByToken
+        when the token is valid
+          ✓ should return a 'welcome' message
+        when the token is invalid
+          ✓ should return an 'forbidden' message
+      Delete /administrators/deleteById/:id
+        when the id is valid
+          ✓ should return a message and the record with this id will be discarded
+        when the id is invalid
+          ✓ should return a message for deleting failure
 
 
+    29 passing (679ms)
+
+~~~
+
+## Extra features.
+
+. . . . Authentication using JWT : When user visits the website again, the login information can be kept without reentering username and password a second time. (Testing code in ./test/functional/api/modelTest.js) . . . . .
+
+
+[datamodel]: ./img/sample_data_model.gif
