@@ -1,14 +1,13 @@
 # Assignment 1 - Agile Software Practice.
 
-Name: ... Wuzhen Ye ...
+Name:  Wuzhen Ye 
 
 ## Overview.
 
-...... I'm developing a vending machine stock management system. Many beverages can be set up in the machine, and their information will be recorded in the database. Administrators can manage the information, such as price, amount, name, and if neccessary they can change what's being sold in the machine. Administrators have different privileges, some of whom can only search the information, but some can change the data. ........
+I'm developing a vending machine stock management system. Many beverages can be set up in the machine, and their information will be recorded in the database. Administrators can manage the information, such as price, amount, name, and if neccessary they can change what's being sold in the machine. Administrators have different privileges, some of whom can only search the information, but some can change the data. 
 
 ## API endpoints.
-
-    Beverages
+       Beverages
  + GET /beverages - Get all beverages.
  + GET /beverages/findById/:id- Get beverages by their IDs.
  + GET /beverages/findByType/:type - Get beverages by their categories.
@@ -19,7 +18,7 @@ Name: ... Wuzhen Ye ...
  + Delete /beverages/deleteById/:id
  + Delete /beverages/deleteByName/:name
  
-    Administrators
+        Administrators
  + GET /administrators
  + GET /administrators/findById/:id
  + Post /administrators/login
@@ -29,7 +28,7 @@ Name: ... Wuzhen Ye ...
 
 ## Data model.
 
-. . . . Describe the structure of the database being used by your API. An image (see example below) or JSON represerntation is acceptable . . . . 
+Two models: administrator and beverage. Each admin can manage different beverages. Some can change the price, and some can delete a certain beverage.
 
 ![][datamodel]
 
@@ -40,8 +39,6 @@ Name: ... Wuzhen Ye ...
     Beverages
       GET /beverages
         when the collection is not empty
-  Successfully Connected to [ vendingMdb ]
-  Successfully Connected to [ vendingMdb ]
           ✓ should GET all the beverages
         when the collection is empty
           ✓ should return a error message
@@ -120,7 +117,8 @@ Name: ... Wuzhen Ye ...
 
 ## Extra features.
 
-. . . . Authentication using JWT : When user visits the website again, the login information can be kept without reentering username and password a second time. (Testing code in ./test/functional/api/modelTest.js) . . . . .
+    Authentication using JWT 
+When user visits the website again, the login information can be kept without reentering username and password a second time. (Testing code in ./test/functional/api/administratorsTest.js) 
 
 
-[datamodel]: ./img/sample_data_model.gif
+[datamodel]: ./img/data_model.png
