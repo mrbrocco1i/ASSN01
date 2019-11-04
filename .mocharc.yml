@@ -1,2 +1,3 @@
 file:
-    - ./test/functional/api/modelsTest.js
+    - ./test/functional/api/beveragesTest.js
+    - ./test/functional/api/administratorsTest.js
