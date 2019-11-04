@@ -142,17 +142,10 @@ router.findByNameFuzzy = (req,res) => {
     res.setHeader('Content-Type', 'application/json');
     var regex = new RegExp(req.params.fname,'i');
     Beverage.find({"name":regex}, function(err,beverage) {
-        if (err)
-            res.send(err);
-        else {
-            if (beverage.length === 0)
-                res.json({message:'No Such Beverage!'});
-            else
-                res.send(JSON.stringify(beverage,null,5));
-        }
-
-
-
+        if (beverage.length === 0)
+            res.json({message:'No Such Beverage!'});
+        else
+            res.send(JSON.stringify(beverage,null,5));
 
     })
 

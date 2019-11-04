@@ -88,7 +88,6 @@ router.login = (req,res) => {
 }
 
 router.loginByToken = (req,res) => {
-    console.log(req.token);
     jwt.verify(req.token, 'secretkey',(err,authData) => {
         if (err)
             res.sendStatus(403);
