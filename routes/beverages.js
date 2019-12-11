@@ -151,4 +151,30 @@ router.findByNameFuzzy = (req,res) => {
 
 }
 
+router.updateBeverage = (req,res) => {
+    res.setHeader('Content-Type', 'application/json');
+    Beverage.findById(req.params.id, function(err,beverage){
+        if (err) {
+            res.status(404);
+            res.send(err);
+        }
+        else {
+            beverage.name = req.body.name;
+            beverage.type = req.body.type;
+            beverage.brand = req.body.brand;
+            beverage.size = req.body.size;
+            beverage.amount = req.body.amount;
+            beverage.price = req.body.price;
+            beverage.save(function (err) {
+                mes = {
+                    message: 'Beverage Updated Successfully!',
+                    beverage: beverage
+                }
+                res.send(JSON.stringify(mes,null,5));
+            })
+        }
+
+    })
+}
+
 module.exports = router;

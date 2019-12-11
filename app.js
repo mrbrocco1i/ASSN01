@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -39,6 +40,7 @@ app.use("*", function (req,res,next) {
 */
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use(cors());
 
 app.get('/beverages', beverages.findAll);
 app.get('/beverages/findById/:id', beverages.findOne);
@@ -47,6 +49,7 @@ app.get('/beverages/findByName_fuzzy/:fname',beverages.findByNameFuzzy);
 app.post('/beverages/addRecord', beverages.addRecord);
 app.put('/beverages/addAmount/:id', beverages.incrementAmount);
 app.put('/beverages/changePrice/:id',beverages.changePrice);
+app.put('/beverages/update/:id',beverages.updateBeverage);
 app.delete('/beverages/deleteById/:id', beverages.deleteRecord);
 app.delete('/beverages/deleteByName/:name',beverages.deleteByName);
 
