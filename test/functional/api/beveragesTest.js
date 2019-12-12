@@ -24,7 +24,7 @@ describe("Beverages", () => {
             // we try to connect to it or start the server
             await mongod.getConnectionString();
 */
-            mongoose.Promise = global.Promise
+
             mongoose.connect("mongodb://localhost:27017/vendingMdb", {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
