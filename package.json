@@ -3,6 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "compile:models": "babel ./models --out-dir dist/models",
+    "compile:routes": "babel ./routes --out-dir dist/routes ",
+    "compile:app": "babel app.js --out-dir dist/",
+    "compile:copy": "cp -r ./node_modules/ dist/node_modules && cp -r bin/ dist/bin && cp -r views/ dist/views",
+    "compile:all": "npm-run-all compile:models compile:routes compile:app compile:copy",
     "clean": "rimraf ./dist && mkdir dist",
     "start": "node ./bin/www",
     "test": "NODE_ENV=test mocha test/functional/api/beveragesTest.js --exit "
