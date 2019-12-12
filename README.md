@@ -1,3 +1,7 @@
+[![pipeline status](https://gitlab.com/20086431/assn01-cicd/badges/master/pipeline.svg)](https://gitlab.com/20086431/assn01-cicd/commits/master)
+
+[![coverage report](https://gitlab.com/20086431/assn01-cicd/badges/master/coverage.svg)](https://gitlab.com/20086431/assn01-cicd/badges/master/coverage.svg?job=coverage)
+
 # Assignment 1 - Agile Software Practice.
 
 Name:  Wuzhen Ye 
