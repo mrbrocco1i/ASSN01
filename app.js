@@ -10,6 +10,7 @@ var usersRouter = require('./routes/users');
 
 const beverages = require('./routes/beverages');
 const administrators = require('./routes/administrators');
+const comments = require('./routes/comments');
 
 var app = express();
 
@@ -61,6 +62,9 @@ app.post('/administrators/addRecord', administrators.addRecord);
 app.post('/administrators/loginByToken',verifyToken,administrators.loginByToken);
 app.delete('/administrators/deleteById/:id', administrators.deleteRecord);
 
+app.get('/comment', comments.findAll);
+app.post('/addComment', comments.addComment);
+app.delete('/deleteCmt/:id', comments.deleteRecord);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
