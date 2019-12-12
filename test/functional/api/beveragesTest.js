@@ -13,7 +13,7 @@ let db, validID, validType, validName;
 describe("Beverages", () => {
     before(async () => {
         try {
-            mongod = new MongoMemoryServer({
+            /*mongod = new MongoMemoryServer({
                 instance: {
                     port: 27017,
                     dbPath: "./test/database",
@@ -23,8 +23,8 @@ describe("Beverages", () => {
             // Async Trick - this ensures the database is created before
             // we try to connect to it or start the server
             await mongod.getConnectionString();
-
-            await mongoose.connect("mongodb://localhost:27017/vendingMdb", {
+*/
+            mongoose.connect("mongodb://localhost:27017/vendingMdb", {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             });
