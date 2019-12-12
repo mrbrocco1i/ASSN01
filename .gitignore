@@ -6,3 +6,4 @@
 /.nyc_output
 /.idea
 /test/database
+/dist

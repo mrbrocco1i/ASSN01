@@ -1,3 +1,4 @@
 file:
     - ./test/functional/api/beveragesTest.js
     - ./test/functional/api/administratorsTest.js
+require: '@babel/register'
