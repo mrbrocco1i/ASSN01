@@ -63,6 +63,7 @@ app.post('/administrators/loginByToken',verifyToken,administrators.loginByToken)
 app.delete('/administrators/deleteById/:id', administrators.deleteRecord);
 
 app.get('/comment', comments.findAll);
+app.get('/:id', comments.findOne);
 app.post('/addComment', comments.addComment);
 app.delete('/deleteCmt/:id', comments.deleteRecord);
 

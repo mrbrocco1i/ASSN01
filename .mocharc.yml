@@ -1,4 +1,5 @@
 file:
+    - ./test/functional/api/commentsTest.js
     - ./test/functional/api/beveragesTest.js
     - ./test/functional/api/administratorsTest.js
 require: '@babel/register'

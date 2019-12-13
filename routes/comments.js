@@ -47,4 +47,19 @@ router.deleteRecord = (req,res) => {
     });
 }
 
+router.findOne = (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    Comment.find({ "_id" : req.params.id },function(err, comment) {
+        if (err) {
+            res.status(404);
+            res.send(err);
+        }
+        else if (comment.length === 0)
+            res.json({message:'No Such Comment!'});
+        else
+            res.json(comment);
+
+    });
+}
+
 module.exports = router;
