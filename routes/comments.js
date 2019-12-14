@@ -3,18 +3,7 @@ let express = require('express');
 let router = express.Router();
 let mongoose = require('mongoose');
 
-var mongodbUri = 'mongodb://localhost:27017/vendingMdb';
-mongoose.connect(mongodbUri, {
-    useNewUrlParser: true, useUnifiedTopology: true
-});
-let db = mongoose.connection;
-db.on('error', function (err) {
-    console.log('Unable to Connect to [ ' + db.name + ' ]', err);
-});
 
-db.once('open', function () {
-    console.log('Successfully Connected to [ ' + db.name + ' ]');
-});
 
 router.findAll = (req, res) => {
     res.setHeader('Content-Type', 'application/json');

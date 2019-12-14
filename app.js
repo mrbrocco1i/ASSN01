@@ -11,7 +11,7 @@ var usersRouter = require('./routes/users');
 const beverages = require('./routes/beverages');
 const administrators = require('./routes/administrators');
 const comments = require('./routes/comments');
-
+var mongoose = require('mongoose')
 var app = express();
 
 // view engine setup
@@ -81,6 +81,20 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+var mongodbUri = "mongodb://myron:YWZ378290@ds243518.mlab.com:43518/heroku_mrtb7t53";
+console.log(mongodbUri)
+mongoose.connect(mongodbUri, {
+    useNewUrlParser: true, useUnifiedTopology: true
+});
+let db = mongoose.connection;
+db.on('error', function (err) {
+    console.log('Unable to Connect to [ ' + db.name + ' ]', err);
+});
+
+db.once('open', function () {
+    console.log('Successfully Connected to [ ' + db.name + ' ]');
 });
 
 function verifyToken(req,res,next) {

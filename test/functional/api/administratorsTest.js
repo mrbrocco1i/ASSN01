@@ -4,31 +4,34 @@ const expect = chai.expect;
 const request = require("supertest");
 const _ = require("lodash");
 const mongoose = require("mongoose");
+const { MongoClient } = require("mongodb")
+const MongoMemoryServer = require("mongodb-memory-server").MongoMemoryServer;
 
 let server;
-let db, validID, validToken;
+let db, validID, validToken, url, connection, collection;
 
 describe("Administrators", () => {
     before(async () => {
         try {
-            /*mongod = new MongoMemoryServer({
+            let mongod = new MongoMemoryServer({
                 instance: {
                     port: 27017,
-                    dbPath: "./test/database",
+                    dbPath: "./test/database1",
                     dbName: "vendingMdb" // by default generate random dbName
-                }
+                },
+                debug: true
             });
             // Async Trick - this ensures the database is created before
             // we try to connect to it or start the server
-            await mongod.getConnectionString();
-   */
+            url = await mongod.getConnectionString();
 
-            mongoose.connect("mongodb://localhost:27017/vendingMdb", {
+            connection = await MongoClient.connect(url, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
-            });
-            server = require("../../../bin/www");
-            db = mongoose.connection;
+            })
+            db = connection.db(await mongod.getDbName())
+             collection = db.collection('administrators')
+            server = require('../../../bin/www')
         } catch (error) {
             console.log(error);
         }
@@ -36,7 +39,7 @@ describe("Administrators", () => {
 
     after(async () => {
         try {
-            await db.dropDatabase();
+         //   await db.dropDatabase();
         } catch (error) {
             console.log(error);
         }

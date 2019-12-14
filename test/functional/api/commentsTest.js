@@ -4,31 +4,33 @@ const expect = chai.expect;
 const request = require("supertest");
 const _ = require("lodash");
 const mongoose = require("mongoose");
+const { MongoClient } = require("mongodb")
+const MongoMemoryServer = require("mongodb-memory-server").MongoMemoryServer;
 
 let server;
-let db, validID, validType, validName;
+let db, validID, url, connection, collection;
 
 describe("Comments", () => {
     before(async () => {
         try {
-            /*mongod = new MongoMemoryServer({
+            let mongod = new MongoMemoryServer({
                 instance: {
                     port: 27017,
-                    dbPath: "./test/database",
+                    dbPath: "./test/database2",
                     dbName: "vendingMdb" // by default generate random dbName
                 }
             });
             // Async Trick - this ensures the database is created before
             // we try to connect to it or start the server
-            await mongod.getConnectionString();
-*/
+            url = await mongod.getConnectionString();
 
-            mongoose.connect("mongodb://localhost:27017/vendingMdb", {
+            connection = await MongoClient.connect(url, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
-            });
-            server = require("../../../bin/www");
-            db = mongoose.connection;
+            })
+            db = connection.db(await mongod.getDbName())
+             collection = db.collection('comments')
+            server = require('../../../bin/www')
         } catch (error) {
             console.log(error);
         }
@@ -36,7 +38,7 @@ describe("Comments", () => {
 
     after(async () => {
         try {
-            await db.dropDatabase();
+          //  await db.dropDatabase();
         } catch (error) {
             console.log(error);
         }
@@ -63,7 +65,7 @@ describe("Comments", () => {
         describe('when the collection is not empty', () => {
             it("should GET all the comments", done => {
                 request(server)
-                    .get("/comments")
+                    .get("/comment")
                     .set("Accept", "application/json")
                     .expect("Content-Type", /json/) // regular expression
                     .expect(200)
@@ -94,7 +96,7 @@ describe("Comments", () => {
             it('should return a error message', () => {
                 db.dropDatabase();
                 return request(server)
-                    .get('/comments')
+                    .get('/comment')
                     .set("Accept", "application/json")
                     .expect("Content-Type", /json/)
                     .expect(200)
@@ -112,7 +114,7 @@ describe("Comments", () => {
                 message: 'Oh'
             };
             return request(server)
-                .post("addComment")
+                .post("/addComment")
                 .send(comment)
                 .expect(200)
                 .then(res => {
@@ -121,7 +123,7 @@ describe("Comments", () => {
         });
         after(() => {
             return request(server)
-                .get('/comments')
+                .get('/comment')
                 .expect(200)
                 .then(res => {
                     expect(res.body).to.be.a("array");
@@ -138,11 +140,11 @@ describe("Comments", () => {
         });
     });
 
-    describe("Delete /deleteCmd/:id", () => {
+    describe("Delete /deleteCmt/:id", () => {
         describe("when the id is valid", () => {
             it("should return a message and the record with this id will be discarded", () => {
                     return request(server)
-                        .delete(`/deleteCmd/${validID}`)
+                        .delete(`/deleteCmt/${validID}`)
                         .expect(200)
                         .then(resp => {
                             expect(resp.body).to.include({
@@ -168,7 +170,7 @@ describe("Comments", () => {
         describe("when the id is invalid", () => {
             it("should return a message for deleting failure", () => {
                 return request(server)
-                    .delete("/deleteCmd/9999")
+                    .delete("/deleteCmt/9999")
                     .expect(404)
             })
 
