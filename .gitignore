@@ -5,5 +5,7 @@
 /coverage
 /.nyc_output
 /.idea
-/test
+/test/database/
+/test/database1/
+/test/database2/
 /dist
