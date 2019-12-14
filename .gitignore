@@ -7,3 +7,9 @@
 /.idea
 /dist
 .env
+/test/database/diagnostic.data
+/test/database/mongod.lock
+/test/database1/diagnostic.data
+/test/database1/mongod.lock
+/test/database2/diagnostic.data
+/test/database2/mongod.lock
