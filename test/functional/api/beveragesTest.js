@@ -107,7 +107,7 @@ describe("Beverages", () => {
                     });
             });
         })
-        describe('when the collection is empty', () => {
+     /*   describe('when the collection is empty', () => {
             it('should return a error message', () => {
                 db.dropDatabase();
                 return request(server)
@@ -119,7 +119,7 @@ describe("Beverages", () => {
                         expect(res.body.message).equals('No Record Found!');
                     });
             })
-        })
+        }) */
 
     });
 

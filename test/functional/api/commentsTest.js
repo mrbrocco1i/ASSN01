@@ -92,7 +92,7 @@ describe("Comments", () => {
                     });
             });
         })
-        describe('when the collection is empty', () => {
+    /*    describe('when the collection is empty', () => {
             it('should return a error message', () => {
                 db.dropDatabase();
                 return request(server)
@@ -104,7 +104,7 @@ describe("Comments", () => {
                         expect(res.body.message).equals('No Record Found!');
                     });
             })
-        })
+        }) */
 
     });
 

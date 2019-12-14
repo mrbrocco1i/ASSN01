@@ -99,7 +99,7 @@ describe("Administrators", () => {
                     });
             });
         })
-        describe('when the collection is empty', () => {
+     /*   describe('when the collection is empty', () => {
             it('should return a error message', () => {
                 db.dropDatabase();
                 return request(server)
@@ -111,7 +111,7 @@ describe("Administrators", () => {
                         expect(res.body.message).equals('No Record!')
                     });
             })
-        })
+        }) */
 
     });
 
